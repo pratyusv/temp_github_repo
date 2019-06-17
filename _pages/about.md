@@ -36,7 +36,7 @@ My interests lie in the area of Reinforcement Learning, UAVs, Formal Methods and
 
 ### __Experience__
 
-* Indian Farmeres Fertilizer Cooperative \\
+* Indian Farmers Fertilizer Cooperative \\
   Designation: Senior Engineer\\
   Duration: Mar'14 - Dec'16 
 
