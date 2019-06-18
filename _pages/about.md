@@ -14,7 +14,7 @@ social: true
 
 I am a MS Research student in the [Department of Computer Science and Engineering](https://www.cse.iitk.ac.in/){:target="\_blank"}, at [Indian Institute of Technology Kanpur](http://www.iitk.ac.in/){:target="\_blank"}, working under the supervision of [Prof. Indranil Saha](https://www.cse.iitk.ac.in/users/isaha/){:target="\_blank"}. I have completed my Bachelor of Technology from Kamla Nehru Institute of Technology, Sultanpur in Computer Science and Engineering. I have nearly three years of industry experience with the likes of IFFCO and Alcatel-Lucent (Now Nokia).
 
-I am currently at Verimag Institute Grenoble, France as Research Scholar working under the supervision of [Prof. Thao Dang](http://www-verimag.imag.fr/PEOPLE/Thao.Dang/){:target="\_blank"} on the Formal Verification of Neural Networks.
+I am currently at Verimag Institute Grenoble, France as a Visiting Research Scholar working under the supervision of [Prof. Thao Dang](http://www-verimag.imag.fr/PEOPLE/Thao.Dang/){:target="\_blank"} in the area of Formal Verification of Neural Networks.
 
 My interests lie in the area of Reinforcement Learning, UAVs, Formal Methods and Control Theroy.
 
