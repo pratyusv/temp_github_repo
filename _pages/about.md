@@ -18,6 +18,15 @@ I am currently at Verimag Institute Grenoble, France as a Visiting Research Scho
 
 My interests lie in the area of Reinforcement Learning, UAVs, Formal Methods and Control Theroy.
 
+
+-----------------
+
+### __Publication__
+* DeepControl: Energy-Efficient Control of a Quadrotor using a Deep Neural Network\\
+  Pratyush Varshney, Gajendra Nagar, Indranil Saha\\
+  IROS 2019
+
+
 -----------------
 
 ### __Education__
@@ -53,3 +62,4 @@ My interests lie in the area of Reinforcement Learning, UAVs, Formal Methods and
 * Playing Atari Games using Reinforcement Learning 
 * Aayush: Online Medical Assistance Portal
 
+----------------------------------------
