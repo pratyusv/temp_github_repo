@@ -28,8 +28,13 @@ layout: default
 2. [SafeAI](http://safeai.ethz.ch/)
 3. [Verisig](https://github.com/Verisig/verisig)
 
-## Resources of Quadrotors
+## Resources for Quadrotors
 
 1. [px4 Autopilot](http://dev.px4.io/en/)
 2. Coursera: [Aerial Robotics](https://www.coursera.org/learn/robotics-flight)
+
+
+## Resource for Control Theory
+
+1. [Nonlinear Control System Design MIT 2.152](http://web.mit.edu/nsl/www/videos/lectures.html)
 
