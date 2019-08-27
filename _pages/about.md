@@ -24,8 +24,8 @@ My interests lie in the area of Reinforcement Learning, UAVs, Formal Methods and
 ### __Publication__
 
 * [DeepControl: Energy-Efficient Control of a Quadrotor using a Deep Neural Network](https://www.youtube.com/watch?v=kWvylnCUUAQ&feature=youtu.be)\\
-  Pratyush Varshney, Gajendra Nagar, Indranil Saha
-  In Proceedings of the IEEE/RSJ International Conference on Intelligent Robots and Systems (IROS 2019)
+  Pratyush Varshney, Gajendra Nagar, Indranil Saha\\
+  In Proceedings of the IEEE/RSJ International Conference on Intelligent Robots and Systems (IROS 2019)\\
   IEEE, Macau, China, November 4-8, 2019
   
 
