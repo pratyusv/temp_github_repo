@@ -8,6 +8,7 @@ layout: default
 2. [Cornell CS4780](https://www.youtube.com/playlist?list=PLl8OlHZGYOQ7bkVbuRthEsaLr7bONzbXS)
 3. [Stanford CS231n](https://www.youtube.com/watch?v=vT1JzLTH4G4&list=PLC1qU-LWwrF64f4QKQT-Vg5Wr4qEE1Zxk)
 4. [Stanford CS221](https://web.stanford.edu/class/cs221/)
+5. [Standford CS224W](http://web.stanford.edu/class/cs224w/)
 
 
 ## Resources for Reinforcement Learning
