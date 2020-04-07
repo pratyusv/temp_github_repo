@@ -35,7 +35,7 @@ My interests lie in the area of Reinforcement Learning, UAVs, Formal Methods and
 
 * Master of Science by Research: 2017 - Present \\
   Computer Science and Engineering from IIT Kanpur\\
-  Master Thesis:\\
+  Master Thesis: <a class="page-link" href="{{ '/assets/pdf/CV.pdf' | prepend: site.baseurl | prepend: site.url }}">Control of Quadrotor using Deep Neural Network</a>
   Advisor: Prof. Indranil Saha
 
 * Bachelor of Technology: 2009 - 2013 \\
