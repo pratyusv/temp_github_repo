@@ -26,26 +26,14 @@ My interests lie in the area of Reinforcement Learning, UAVs, Formal Methods and
   Pratyush Varshney, Gajendra Nagar, Indranil Saha\\
   In Proceedings of the IEEE/RSJ International Conference on Intelligent Robots and Systems (IROS 2019)\\
   IEEE, Macau, China, November 4-8, 2019
-  
-
-
------------------
-
-### __Education__
-
-* Master of Science by Research: 2017 - Present \\
-  Computer Science and Engineering from IIT Kanpur\\
-  Master Thesis: <a class="page-link" href="{{ '/assets/pdf/CV.pdf' | prepend: site.baseurl | prepend: site.url }}">Control of Quadrotor using Deep Neural Network</a>
-  Advisor: Prof. Indranil Saha
-
-* Bachelor of Technology: 2009 - 2013 \\
-  Computer Science and Engineering from KNIT Sultanpur\\
-  Final Project: Web-portal for Medical Assistance in J2EE struts\\
-  Advisor: Prof. Abhay Kumar Agrawal
-
+ 
 -----------------
 
 ### __Experience__
+
+* Adobe \\
+  Designation: Member of Technical Staff\\
+  Duration: Oct'19 - Present
 
 * Indian Farmers Fertilizer Cooperative \\
   Designation: Senior Engineer\\
@@ -54,6 +42,23 @@ My interests lie in the area of Reinforcement Learning, UAVs, Formal Methods and
 * Alcatel-Lucent (Now Nokia) \\
   Designation: Software Engineer\\
   Duration: Nov'13 - Mar'14 
+
+
+-----------------
+
+### __Education__
+
+* Master of Science by Research: 2017 - 2019 \\
+  Computer Science and Engineering from IIT Kanpur\\
+  Master Thesis: <a class="page-link" href="{{ '/assets/pdf/PratyushVarshneyMSThesis.pdf' | prepend: site.baseurl | prepend: site.url }}">Control of Quadrotor using Deep Neural Network</a>\\
+  Advisor: Prof. Indranil Saha
+
+* Bachelor of Technology: 2009 - 2013 \\
+  Computer Science and Engineering from KNIT Sultanpur\\
+  Final Project: Web-portal for Medical Assistance in J2EE struts\\
+  Advisor: Prof. Abhay Kumar Agrawal
+
+
 
 --------------
 
