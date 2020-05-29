@@ -8,7 +8,7 @@ layout: default
 </div>
 
 
-<ul class="post-list">
+<!-- <ul class="post-list">
   {% for post in paginator.posts %}
     <li>
       <h2><a class="post-title" href="{{ post.url | prepend: site.baseurl }}">{{ post.title }}</a></h2>
@@ -16,6 +16,19 @@ layout: default
       <p>{{ post.description }}</p>
     </li>
   {% endfor %}
-</ul>
+</ul> -->
+
+{% for category in site.categories %}
+  <h3>{{ category[0] }}</h3>
+  <ul class="post-list">
+    {% for post in category[1] %}
+      <li>
+        <a class="post-title" href="{{ post.url | prepend: site.baseurl }}">{{ post.title }}</a>
+        <p class="post-meta">{{ post.date | date: '%B %-d, %Y — %H:%M' }}</p>
+        <p>{{ post.description }}</p>
+      </li>
+    {% endfor %}
+  </ul>
+{% endfor %}
 
 {% include pagination.html %}

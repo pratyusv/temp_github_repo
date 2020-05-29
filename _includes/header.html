@@ -1,4 +1,14 @@
 <header class="site-header">
+  
+  <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+        inlineMath: [['$','$']]
+      }
+    });
+  </script>
+  <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script> 
 
   <div class="wrapper">
 
@@ -26,7 +36,7 @@
         <a class="page-link" href="{{ site.baseurl | prepend: site.url }}/">About</a>
 
         <!-- Blog -->
-        <!-- <a class="page-link" href="{{ '/resources/' | prepend: site.baseurl | prepend: site.url }}">Resources</a> -->
+        <a class="page-link" href="{{ '/blog/' | prepend: site.baseurl | prepend: site.url }}">Blog</a>
 
         <!-- Pages -->
         <!-- {% for page in site.pages %}
@@ -41,7 +51,7 @@
 
         <!-- Resources -->
         <a class="page-link" href="{{ '/resources/' | prepend: site.baseurl | prepend: site.url }}">Resources</a>
-
+        
       </div>
     </nav>
 

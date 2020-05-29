@@ -2,7 +2,7 @@
 layout: about
 permalink: /
 title: <strong>Pratyush</strong> Varshney
-description: <a href="https://cse.iitk.ac.in/">Member of Technical Staff | Adobe</a> 
+description: Member of Technical Staff | Adobe Systems
 
 profile:
   align: right
@@ -12,7 +12,7 @@ news: false
 social: true
 ---
 
-I am currently working at Adobe Inc. Bangalore, India as a Member of Technical Staff. Prior to that, I completed my Master of Science by Research from the [Department of Computer Science and Engineering](https://www.cse.iitk.ac.in/){:target="\_blank"}, at [Indian Institute of Technology Kanpur](http://www.iitk.ac.in/){:target="\_blank"}, under the supervision of [Prof. Indranil Saha](https://www.cse.iitk.ac.in/users/isaha/){:target="\_blank"}. I have completed my Bachelor of Technology from Kamla Nehru Institute of Technology, Sultanpur in Computer Science and Engineering. Before my Masters, I had worked with the likes of IFFCO and Alcatel-Lucent (Now Nokia). I have spent the summer of 2019 at VERIMAG Labs Grenoble, France as a Visiting Research Scholar working under the supervision of [Prof. Thao Dang](http://www-verimag.imag.fr/PEOPLE/Thao.Dang/){:target="\_blank"}.
+I am currently working at Adobe Systems Bangalore, India as a Member of Technical Staff. Prior to that, I completed my Master of Science by Research from the [Department of Computer Science and Engineering](https://www.cse.iitk.ac.in/){:target="\_blank"}, at [Indian Institute of Technology Kanpur](http://www.iitk.ac.in/){:target="\_blank"}, under the supervision of [Prof. Indranil Saha](https://www.cse.iitk.ac.in/users/isaha/){:target="\_blank"}. I have completed my Bachelor of Technology from Kamla Nehru Institute of Technology, Sultanpur in Computer Science and Engineering. Before my Masters, I had worked with the likes of IFFCO and Alcatel-Lucent (Now Nokia). I have spent the summer of 2019 at VERIMAG Labs Grenoble, France as a Visiting Research Scholar working under the supervision of [Prof. Thao Dang](http://www-verimag.imag.fr/PEOPLE/Thao.Dang/){:target="\_blank"}.
 
 
 My interests lie in the area of Reinforcement Learning, UAVs, Formal Methods and Control Theory.
