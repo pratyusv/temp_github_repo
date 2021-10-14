@@ -2,7 +2,7 @@
 layout: about
 permalink: /
 title: <strong>Pratyush</strong> Varshney
-description: Member of Technical Staff | Adobe Systems
+description: Software Development Engineer | Microsoft
 
 profile:
   align: right
@@ -16,7 +16,8 @@ I am currently working at Microsoft India Development Center, Hyderabad, India, 
 
 I completed my Master of Science by Research from the [Department of Computer Science and Engineering](https://www.cse.iitk.ac.in/){:target="\_blank"}, at [Indian Institute of Technology Kanpur](http://www.iitk.ac.in/){:target="\_blank"}, under the supervision of [Prof. Indranil Saha](https://www.cse.iitk.ac.in/users/isaha/){:target="\_blank"}. I have completed my Bachelor of Technology from Kamla Nehru Institute of Technology, Sultanpur in Computer Science and Engineering. 
 
-Before my Masters, I had worked with the likes of IFFCO and Alcatel-Lucent (Now Nokia). I had spent the summer of 2019 at VERIMAG Labs Grenoble, France as a Visiting Research Scholar working under the supervision of [Prof. Thao Dang](http://www-verimag.imag.fr/PEOPLE/Thao.Dang/){:target="\_blank"}.
+Before my Masters, I have
+ worked with the likes of IFFCO and Alcatel-Lucent (Now Nokia). I had spent the summer of 2019 at VERIMAG Labs Grenoble, France as a Visiting Research Scholar working under the supervision of [Prof. Thao Dang](http://www-verimag.imag.fr/PEOPLE/Thao.Dang/){:target="\_blank"}.
 
 
 My interests lie in the area of Reinforcement Learning, UAVs, Formal Methods and Control Theory.
@@ -50,7 +51,6 @@ My interests lie in the area of Reinforcement Learning, UAVs, Formal Methods and
 * Alcatel-Lucent (Now Nokia) \\
   Designation: Software Engineer\\
   Duration: Nov'13 - Mar'14 
-
 
 -----------------
 
