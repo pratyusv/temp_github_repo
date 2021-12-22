@@ -1,0 +1,26 @@
+---
+layout: post
+title: ZooKeeper
+date: 2021-03-01 08:12:00-0400
+# description: Instance
+categories: ['System Design']
+---
+
+
+Zookeeper provides a per client guarantee of FIFO execution of requests and linearizability of all requests that change the Zookeeper state.
+
+It does not use distributed locks, as using locks can result into slow down or a faulty client might slow down the performance of faster client. It uses wait free data objects organized heirarichally as in file systems.
+
+
+Client APIs
+
+create(path, data, flag)
+delete(path, version)
+exists(path, watch)
+
+getData(path, watch)
+setData(path, data, version)
+
+
+getChildren(path, watch)
+sync(path)
