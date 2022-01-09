@@ -1,15 +1,16 @@
 ---
 layout: about
+title: about
 permalink: /
-title: <strong>Pratyush</strong> Varshney
-description: Software Development Engineer | Microsoft
+subtitle: Microsoft | Software Development Engineer
 
 profile:
   align: right
   image: me.jpg
-  
-news: false
-social: true
+
+news: false  # includes a list of news items
+selected_papers: true # includes a list of papers marked as "selected={true}"
+social: false  # includes social icons at the bottom of the page
 ---
 
 I am currently working at Microsoft India Development Center, Hyderabad, India, as a Software Developer. Prior to that, I worked as a Member of Technical Staff at Adobe. 
@@ -18,63 +19,3 @@ I completed my Master of Science by Research from the [Department of Computer Sc
 
 Before my Masters, I have
  worked with the likes of IFFCO and Alcatel-Lucent (Now Nokia). I had spent the summer of 2019 at VERIMAG Labs Grenoble, France as a Visiting Research Scholar working under the supervision of [Prof. Thao Dang](http://www-verimag.imag.fr/PEOPLE/Thao.Dang/){:target="\_blank"}.
-
-
-My interests lie in the area of Reinforcement Learning, UAVs, Formal Methods and Control Theory.
-
-
------------------
-
-### __Publication__
-
-* [DeepControl: Energy-Efficient Control of a Quadrotor using a Deep Neural Network](https://www.youtube.com/watch?v=kWvylnCUUAQ&feature=youtu.be)\\
-  Pratyush Varshney, Gajendra Nagar, Indranil Saha\\
-  In Proceedings of the IEEE/RSJ International Conference on Intelligent Robots and Systems (IROS 2019)\\
-  IEEE, Macau, China, November 4-8, 2019
- 
------------------
-
-### __Experience__
-
-* Microsoft\\
-  Designation: Software Engineer\\
-  Duration: Dec'20 - Present
-
-* Adobe \\
-  Designation: Member of Technical Staff\\
-  Duration: Oct'19 - Nov'20
-
-* Indian Farmers Fertilizer Cooperative \\
-  Designation: Senior Engineer\\
-  Duration: Mar'14 - Dec'16 
-
-* Alcatel-Lucent (Now Nokia) \\
-  Designation: Software Engineer\\
-  Duration: Nov'13 - Mar'14 
-
------------------
-
-### __Education__
-
-* Master of Science by Research: 2017 - 2019 \\
-  Computer Science and Engineering from IIT Kanpur\\
-  Master Thesis: <a class="page-link" href="{{ '/assets/pdf/PratyushVarshneyMSThesis.pdf' | prepend: site.baseurl | prepend: site.url }}">Control of Quadrotor using Deep Neural Network</a>\\
-  Advisor: Prof. Indranil Saha
-
-* Bachelor of Technology: 2009 - 2013 \\
-  Computer Science and Engineering from KNIT Sultanpur\\
-  Final Project: Web-portal for Medical Assistance in J2EE struts\\
-  Advisor: Prof. Abhay Kumar Agrawal
-
-
-
---------------
-
-### __Projects__
-
-* Neural Network-Based Modeling and Control of Quadcopters 
-* Formal Verification of Artificial Neural Networks: A Survey 
-* Playing Atari Games using Reinforcement Learning 
-* Aayush: Online Medical Assistance Portal
-
-----------------------------------------

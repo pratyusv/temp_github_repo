@@ -3,7 +3,7 @@ layout: post
 title: Load Balancers
 date: 2020-05-28 08:12:00-0400
 # description: Instance
-categories: ['System Design']
+categories: ['Distributed Systems Components']
 ---
 
 
@@ -17,7 +17,7 @@ Load balancers work at different networking layers. The load balancer generally 
 
     IP Packet:
 
-    [src:"client address" dest: "load balancer"] $\rightarrow$ [src: "load balancer", dest: "webserver"]
+    [src:"client address" dest: "load balancer"] $$\rightarrow$$ [src: "load balancer", dest: "webserver"]
 
 * Similary before forwarding the packets from server to client, it changes the src address from content server to its own.
 * L4 load balancer make routing decision based on the packet headers. They do not inspect the packet content.
@@ -36,7 +36,7 @@ Load balancers work at different networking layers. The load balancer generally 
 3. To further increase the RPS, L4LBs are added infront of L7LBs. The L4LBs consistently hash the client's request to L7LBs. The TCP connection is maintained by the L4LBs.
 4. To further increase the RPS, a router is added in front of L4LBs. The router connects to consistently hashed L4LBs using ECMP. The system now look like 
 
-    Cluster: [Router $\rightarrow$ L4LBs $\rightarrow$ L7LBs $\rightarrow$ HHVM]
+    Cluster: [Router $$\rightarrow$$ L4LBs $$\rightarrow$$ L7LBs $$\rightarrow$$ HHVM]
 5. As router is a single point of failure, the clusters are replicated in different data centers for redundency and avoid single point of failure.
 
 

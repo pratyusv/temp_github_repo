@@ -3,7 +3,7 @@ layout: post
 title: Google File System
 date: 2021-05-01 08:12:00-0400
 # description: Instance
-categories: ['System Design']
+categories: ['Distributed Systems Components']
 ---
 
 ### Google File System
@@ -74,7 +74,7 @@ GFS has a
 * For fault tolerance, the logs are replicated across remote machines.
 * Master responds to the client only after flushing the log to the disk. The master, batches several logs files together, reducing the impact of the flushing on the throughput.
 * The master recovers the file system state by replaying the logs. To minimize the startup time, the master checkpoints its state when the logs grow above a certain size. The master can load the checkpoint and replay the logs after the checkpoint to recreate the file system state and minimize the startup time.
-    * $ Log1 \rightarrow Log2 \rightarrow [Log1 + Log2: \textbf{Checkpoint1}] \rightarrow Log3$
+    * $$ Log1 \rightarrow Log2 \rightarrow [Log1 + Log2: \textbf{Checkpoint1}] \rightarrow Log3$$
     * The master can restore the state by loading *Checkpoint1* and replaying the *Log3*
     * Checkpoint is in form of B-Tree, directly mapped to memory
 * Checkpoint can be saved without effecting the master's working. When master wants to create a checkpoint it creates a new log file and starts writing to the new log file. Master instantiates a seperate thread that converts the older log files to checkpoints.
@@ -86,12 +86,12 @@ GFS has a
 
 1. Using the fixed chunk size, the client APIs transfer the file name and offset bytes into a chunk index within a file.
 2. It sends the master a request containing the file name and chunk index. 
-    * *ControlMsg: Client $\rightarrow$ Master, [filename, chunk index]*
+    * *ControlMsg: Client $$\rightarrow$$ Master, [filename, chunk index]*
 3. Master replies with the chunk handles and list of replicas.
-    * *ControlMsg: Master $\rightarrow$ Client, [chunk handle, chunk location]*
+    * *ControlMsg: Master $$\rightarrow$$ Client, [chunk handle, chunk location]*
     * This information is cached at the client by filename and chunk index as a key.
 4. Client sends the request to replicas, probably the closest one.
-    * *ControlMsg: Client $\rightarrow$ ChunkServer, [chunk handle, byte-range within chunk]*
+    * *ControlMsg: Client $$\rightarrow$$ ChunkServer, [chunk handle, byte-range within chunk]*
 5. Further reads of the same chunk do not require master-client interaction until the cached information with the client expires.
 
 
