@@ -1,0 +1,167 @@
+I"-<p>Here we aim to restrict the API calls to a server within a specified limit.</p>
+
+<hr />
+<h3 id="requirements">Requirements</h3>
+<h4 id="functional">Functional</h4>
+
+<ol>
+  <li>Limit the number of requests to an API server within a time window. Ex: 100 requests/sec.</li>
+  <li>The rate limiter should be applied to all the instances of the API server in a distributed server. This means that an error should be thrown when the request threshold is crossed either on a single server or across a combination of servers.</li>
+</ol>
+
+<h4 id="non-functional">Non-functional</h4>
+<ol>
+  <li>Highly available</li>
+  <li>Scalable</li>
+  <li>Low Latency</li>
+</ol>
+
+<hr />
+
+<h4 id="throttling-criteria">Throttling Criteria</h4>
+<p>The important point to note here is that the throttling can be done at two levels:</p>
+<ol>
+  <li><em>User</em>: 
+ After authentication, the user can be assigned tokens. Based on the token, throttling can be performed. The problem with this approach is that throttling can only be performed after authentication. Any malicious actor can throttle the authentication system itself.</li>
+  <li><em>IP/ Geography</em>:
+ Based on the source of the request throttling can be performed. The problem with this approach is that multiple users can be using the same gateway as in a big data center. This will cause an issue as for the rate limiter it will seem as if the requests are coming from a single source.</li>
+</ol>
+
+<p>We can combine both approaches for the best performance.</p>
+
+<hr />
+
+<h3 id="approach">Approach</h3>
+
+<p>Let’s assume we are designing a system to limit the requests to 5 <strong>requests per second (RPS)</strong></p>
+
+<h4 id="1-fixed-window-counter">1. Fixed Window Counter</h4>
+
+<p>We maintain a fixed window and count the number of requests in that window. If the requests exceed the limit in that particular window, we drop that request. The count is reset after the window expires.</p>
+
+<div>
+    <img src="/pratyusv/assets/img/FixedWindow.png" />
+</div>
+
+<p>The problem with this approach is that we are considering requests per window as independent from each other. There could be a case where the request is stacked near the end of the current window and the start of the next window. The algorithm will allow the request to be forwarded to the API server, but in reality, the server would be serving requests more than the limit.</p>
+
+<p>To overcome the problem, we can have a rolling window.</p>
+
+<h4 id="2-sliding-window-counter">2. Sliding Window Counter</h4>
+
+<p>In the sliding window, the window is considered from the time of the request. We count the number of requests that are pending from the current request time.</p>
+
+<hr />
+
+<h3 id="algorithm">Algorithm</h3>
+
+<p>We maintain a hashtable or a Redis cache to store the user visits, where the <code class="language-plaintext highlighter-rouge">key: userId, value: List&lt;timestamp&gt;</code>.</p>
+
+<ol>
+  <li>Remove all the entries  <code class="language-plaintext highlighter-rouge">current timestamp - ListTimeStamp &gt; 1</code> as they will not contribute to the requests for that window.</li>
+  <li>Check the size of the remaining list. If the <code class="language-plaintext highlighter-rouge">ListSize &gt;= limit</code> drop the request else process the request.</li>
+</ol>
+
+<p>Lets assume that X is sending request at instances: <code class="language-plaintext highlighter-rouge">[ 03:00:00 AM [400], 03:01:05 AM [465], 03:01:20 AM [480], 03:01:45 AM[505] , 03:01:50 AM[520], 03:02:10 AM [530] ]</code>.
+Let the limit be set as 3 requests per second.</p>
+
+<ol>
+  <li><strong>Request: [X] at 03:00:00</strong>
+    <ul>
+      <li>This is the first request. Insert it into the cache/table</li>
+      <li><strong>Cache: [x: {400}]</strong></li>
+    </ul>
+  </li>
+  <li><strong>Request: [X] at 03:01:05</strong>
+    <ul>
+      <li>Remove the existing entry in the timestamp list as the <code class="language-plaintext highlighter-rouge">currentTimestamp - ListTimeStamp &gt; 1</code>. The existing entry was of <code class="language-plaintext highlighter-rouge">03:00:00</code> and the current request is at <code class="language-plaintext highlighter-rouge">03:01:05</code>. The 1 second window of first request has expired so its safe to remove the entry.</li>
+      <li>
+        <font color="green"> List size for X is 0. Process the request.</font>
+      </li>
+      <li><strong>Cache: [x: {465}]</strong></li>
+    </ul>
+  </li>
+  <li><strong>Request: [X] at 03:01:20</strong>
+    <ul>
+      <li>
+        <font color="green"> List size for X is 1. Process the request.</font>
+      </li>
+      <li><strong>Cache: [x: {465, 480}]</strong></li>
+    </ul>
+  </li>
+  <li><strong>Request: [X] at 03:01:45</strong>
+    <ul>
+      <li>
+        <font color="green"> List size for X is 2. Process the request.</font>
+      </li>
+      <li><strong>Cache: [x: {465, 480, 505}]</strong></li>
+    </ul>
+  </li>
+  <li><strong>Request: [X] at 03:01:50</strong>
+    <ul>
+      <li>List size for X is 3. <code class="language-plaintext highlighter-rouge">Size &gt; Limit - 1</code>, <font color="red"> Drop the request. </font></li>
+      <li><strong>Cache: [x: {465, 480, 505}]</strong></li>
+    </ul>
+  </li>
+  <li><strong>Request: [X] at 03:02:10</strong>
+    <ul>
+      <li>Remove the existing entry in the timestamp list as the <code class="language-plaintext highlighter-rouge">currentTimestamp - ListTimeStamp &gt; 1</code>. Remove the entry for <code class="language-plaintext highlighter-rouge">03:01:05 AM</code></li>
+      <li>
+        <font color="green"> List size for X is 2. Process the request.</font>
+      </li>
+      <li><strong>Cache: [x: {480, 505, 530}]</strong></li>
+    </ul>
+  </li>
+</ol>
+
+<hr />
+
+<h3 id="sample-c-implementation">Sample C++ implementation</h3>
+
+<figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="n">unordered_map</span><span class="o">&lt;</span><span class="n">userId</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">dequeue</span><span class="o">&lt;</span><span class="n">TimeStamp</span><span class="o">&gt;&gt;</span> <span class="n">request_queue</span><span class="p">;</span>
+
+<span class="kt">bool</span> <span class="nf">request</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">userId</span><span class="p">,</span> <span class="n">TimeStamp</span> <span class="n">request_time</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">std</span><span class="o">::</span><span class="n">dequeue</span><span class="o">&lt;</span><span class="n">TimeStamp</span><span class="o">&gt;</span> <span class="n">time_queue</span><span class="p">;</span>
+    
+    <span class="c1">// first request</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">request_queue</span><span class="p">.</span><span class="n">find</span><span class="p">(</span><span class="n">userId</span><span class="p">)</span> <span class="o">==</span> <span class="n">request_queue</span><span class="p">.</span><span class="n">end</span><span class="p">())</span> <span class="p">{</span>
+        <span class="n">request_queue</span><span class="p">[</span><span class="n">userId</span><span class="p">]</span> <span class="o">==</span> <span class="n">time_queue</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="n">request_time</span><span class="p">);</span>
+        <span class="k">return</span> <span class="nb">true</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="n">time_queue</span> <span class="o">=</span> <span class="n">request_queue</span><span class="p">[</span><span class="n">userId</span><span class="p">];</span>
+    <span class="k">while</span><span class="p">(</span><span class="o">!</span><span class="n">time_queue</span><span class="p">.</span><span class="n">empty</span><span class="p">()</span> <span class="o">&amp;&amp;</span> <span class="n">request_time</span> <span class="o">-</span> <span class="n">time_queue</span><span class="p">.</span><span class="n">top</span><span class="p">()</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">time_queue</span><span class="p">.</span><span class="n">pop</span><span class="p">();</span>
+    <span class="p">}</span> 
+
+    <span class="k">if</span> <span class="p">(</span><span class="n">request_queue</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">&gt;</span> <span class="n">LIMIT</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="n">time_queue</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="n">request_time</span><span class="p">);</span>
+    <span class="k">return</span> <span class="nb">true</span><span class="p">;</span>
+<span class="p">}</span></code></pre></figure>
+
+<hr />
+
+<h3 id="distributed-system">Distributed System</h3>
+
+<p>In a distributed environment this technique will suffer from a few issues:</p>
+<ol>
+  <li>If the request is fired by the user to two different servers at the same time, then there might be a chance of breaching the threshold.
+ Ex: If the threshold is 3 and the user has already attempted 2 requests. Now suppose the user fires 2 requests to different servers. The Redis entry will still reflect as 2 attempts for both the servers and both the requests will go through. This will cross the threshold of the server as now the server has serviced 4 requests.</li>
+</ol>
+
+<div>
+    <img src="/pratyusv/assets/img/RateLimitterDS.png" />
+</div>
+
+<p>We can shard based on the ‘UserID’ to distribute the user’s data. For fault tolerance and replication we should use Consistent Hashing. If we want to have different throttling limits for different APIs, we can choose to shard per user per API. Take the example of URL Shortener; we can have different rate limiters for createURL() and deleteURL() APIs for each user or IP.</p>
+
+<p>If our APIs are partitioned, a practical consideration could be to have a separate (somewhat smaller) rate limiter for each API shard as well. Let’s take the example of our URL Shortener where we want to limit each user not to create more than 100 short URLs per hour. Assuming we are using Hash-Based Partitioning for our createURL() API, we can rate-limit each partition to allow a user to create not more than three short URLs per minute in addition to 100 short URLs per hour.</p>
+
+<p>Our system can get huge benefits from caching recent active users. Application servers can quickly check if the cache has the desired record before hitting backend servers. Our rate limiter can significantly benefit from the Write-back cache by updating all counters and timestamps in cache only. The write to the permanent storage can be done at fixed intervals. This way we can ensure minimum latency is added to the user’s requests by the rate limiter. The reads can always hit the cache first; which will be extremely useful once the user has hit their maximum limit and the rate limiter will only be reading data without any updates.</p>
+
+<p>Least Recently Used (LRU) can be a reasonable cache eviction policy for our system.</p>
+
+:ET

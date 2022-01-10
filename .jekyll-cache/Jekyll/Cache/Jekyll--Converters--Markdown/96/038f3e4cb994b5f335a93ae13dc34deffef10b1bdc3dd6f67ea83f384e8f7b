@@ -1,0 +1,6 @@
+I"J<p>It is a <strong>Consistent, Partial Fault Tolerence</strong> type datatabase with strict consistent read/writes. It is suitable for large storage where each row is less than 10MB. It is used to store data for one of the types:</p>
+<ol>
+  <li>Time Series data: chronological data</li>
+  <li>Constant stream of writes</li>
+</ol>
+:ET

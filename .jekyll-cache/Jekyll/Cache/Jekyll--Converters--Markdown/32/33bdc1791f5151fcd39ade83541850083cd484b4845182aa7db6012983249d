@@ -1,0 +1,134 @@
+I"F<h3 id="google-file-system">Google File System</h3>
+
+<p>GFS is a file distributed file system that is:</p>
+
+<ul>
+  <li>scalable</li>
+  <li>data-intensive applications</li>
+  <li>fault tolerent</li>
+</ul>
+
+<p>GFS was designed by keeping in mind:</p>
+<ol>
+  <li>Component failure of systems is the norm rather than an exception</li>
+  <li>Files are huge which can run into TBs</li>
+  <li>Files are mutated by appending data at the end. Writing between the files is very rare. The reads performed on file can be divided into two parts:
+    <ul>
+      <li>Large streaming reads: Individual operations read a small chunk of the file may be up to 1MB. Successive operations from the same client often read through the contiguous region of a file.</li>
+      <li>Small random reads: Typically few KB is read arbitrarily from the file.
+ For better performance often small random reads are batched together.</li>
+    </ul>
+  </li>
+</ol>
+
+<p>GFS supports operations like <em>create, delete, open, close, read, write</em> on files. It further supports <em>snapshot, record append</em>.</p>
+<ul>
+  <li><em>snapshot</em>: Creates a copy of the file or directory at a low cost.</li>
+  <li><em>record append</em>: allows multiple clients to append to the same file concurrently while guaranteeing the <em>atomicity</em> of each append operation.</li>
+</ul>
+
+<hr />
+
+<h3 id="architecture">Architecture</h3>
+
+<p>GFS has a</p>
+<ul>
+  <li>single <em>master</em></li>
+  <li>multiple <em>chunkservers</em>: Linux systems that store the files.</li>
+</ul>
+
+<h4 id="files">Files:</h4>
+
+<ul>
+  <li>Files are divided into fixed-size <em>chunks</em>. Each chunk is assigned a global, unique, immutable handle of 64 bit by the master.</li>
+  <li>Chunkservers store the chunk on the local disk as Linux files. They read or write chunk data specified by the handle.</li>
+  <li>For reliability, each chunk is replicated at multiple chunkservers. By default, it’s populated in 3 chunkservers.</li>
+</ul>
+
+<h4 id="gfs-master">GFS Master:</h4>
+<ul>
+  <li>Master maintains all the metadata: <em>namespace, access control, mapping from files to chunk, location of chunks</em>, etc.</li>
+  <li>Control system-wide activities: <em>chunk lease management, garbage collection of orphaned chunks, chunk migration between servers</em></li>
+  <li>Communicates with chunkserver with <em>HeartBeat</em> messages to provide instructions and collect chunkserver states.</li>
+</ul>
+
+<h4 id="gfs-client">GFS Client</h4>
+<ul>
+  <li>GFS client code linked into each application implements the file system APIs</li>
+  <li>Clients interact with the master for metadata operation, but all files related communication takes place with chunkservers. The information received from the master is cached with the client for a limited period.</li>
+</ul>
+
+<h4 id="chunk-size">Chunk Size</h4>
+<ul>
+  <li>Each chunk is specified as constant <strong>64 MB</strong>, which is larger than typical file system block sizes.</li>
+  <li>Large chunk size reduces the client interaction with the chunkserver as multiple read-write on the same chunk requires only single interaction.</li>
+  <li>It reduces the size of metadata stored at the master.</li>
+</ul>
+
+<h4 id="metadata">Metadata</h4>
+<ul>
+  <li>Master stores the following metadata in its memory:
+    <ul>
+      <li>file and chunk namespace</li>
+      <li>mapping from files to chunks</li>
+      <li>location of each chunk’s replicas</li>
+    </ul>
+  </li>
+  <li>The file and chunk namespace, mapping from files to chunks are persisted by <em>logging mutations to an operation log stored</em> on master’s local disk and replicas.
+    <ul>
+      <li>In case of a master’s crash the information can be retrieved from the logs.</li>
+      <li>The location is not persisted because, on a master startup, it contacts chunkservers for the information they have about the stored chunks.</li>
+    </ul>
+  </li>
+</ul>
+
+<h4 id="chunk-location">Chunk Location</h4>
+<ul>
+  <li>The master does not keep a persistent record of chunk locations.</li>
+  <li>During startup it pings the chunkserver for the information about the chunks they are holding. Subsequent <em>HeartBeat</em> messages from the master to chunkserver help maintain the information about the state change.</li>
+</ul>
+
+<h4 id="operation-logs--checkpoint">Operation Logs &amp; Checkpoint</h4>
+<ul>
+  <li>Operation logs contain the mutations to critical meta-data. In case of failures, these logs can restore the state of the master.</li>
+  <li>For fault tolerance, the logs are replicated across remote machines.</li>
+  <li>Master responds to the client only after flushing the log to the disk. The master, batches several logs files together, reducing the impact of the flushing on the throughput.</li>
+  <li>The master recovers the file system state by replaying the logs. To minimize the startup time, the master checkpoints its state when the logs grow above a certain size. The master can load the checkpoint and replay the logs after the checkpoint to recreate the file system state and minimize the startup time.
+    <ul>
+      <li>
+\[Log1 \rightarrow Log2 \rightarrow [Log1 + Log2: \textbf{Checkpoint1}] \rightarrow Log3\]
+      </li>
+      <li>The master can restore the state by loading <em>Checkpoint1</em> and replaying the <em>Log3</em></li>
+      <li>Checkpoint is in form of B-Tree, directly mapped to memory</li>
+    </ul>
+  </li>
+  <li>Checkpoint can be saved without effecting the master’s working. When master wants to create a checkpoint it creates a new log file and starts writing to the new log file. Master instantiates a seperate thread that converts the older log files to checkpoints.</li>
+</ul>
+<div>
+    <img src="/pratyusv/assets/img/GFS.png" />
+</div>
+
+<h3 id="flow">Flow</h3>
+
+<ol>
+  <li>Using the fixed chunk size, the client APIs transfer the file name and offset bytes into a chunk index within a file.</li>
+  <li>It sends the master a request containing the file name and chunk index.
+    <ul>
+      <li><em>ControlMsg: Client \(\rightarrow\) Master, [filename, chunk index]</em></li>
+    </ul>
+  </li>
+  <li>Master replies with the chunk handles and list of replicas.
+    <ul>
+      <li><em>ControlMsg: Master \(\rightarrow\) Client, [chunk handle, chunk location]</em></li>
+      <li>This information is cached at the client by filename and chunk index as a key.</li>
+    </ul>
+  </li>
+  <li>Client sends the request to replicas, probably the closest one.
+    <ul>
+      <li><em>ControlMsg: Client \(\rightarrow\) ChunkServer, [chunk handle, byte-range within chunk]</em></li>
+    </ul>
+  </li>
+  <li>Further reads of the same chunk do not require master-client interaction until the cached information with the client expires.</li>
+</ol>
+
+:ET

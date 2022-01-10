@@ -1,0 +1,126 @@
+I"m$<h1 id="stdmove">std::move</h1>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">std::move</code> unconditionally casts its input to <strong>rvalue</strong> reference.</li>
+  <li><code class="language-plaintext highlighter-rouge">std::move</code> does not move anything</li>
+</ul>
+
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">template</span> <span class="o">&lt;</span><span class="kr">typename</span> <span class="n">T</span><span class="o">&gt;</span>
+<span class="n">std</span><span class="o">::</span><span class="n">remove_reference_t</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;&amp;&amp;</span> <span class="n">move</span><span class="p">(</span><span class="n">T</span><span class="o">&amp;&amp;</span> <span class="n">t</span><span class="p">)</span> <span class="n">noexcept</span>
+<span class="p">{</span>
+    <span class="k">return</span> <span class="n">static_cast</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">remove_reference_t</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;&amp;&amp;&gt;</span><span class="p">(</span> <span class="n">t</span> <span class="p">);</span>
+<span class="p">}</span> 
+</code></pre></div></div>
+<p><code class="language-plaintext highlighter-rouge">std::move</code> is semantic transfer of ownership.</p>
+
+<h2 id="lvalue-and-rvalue">lvalue and rvalue</h2>
+
+<p><strong>lvalue</strong>: Some value that has a name<br />
+<strong>rvalue</strong>: Value with no name.</p>
+
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">s</span><span class="p">;</span>
+<span class="n">s</span> <span class="o">+</span> <span class="n">s</span> <span class="o">=</span> <span class="n">s</span>
+</code></pre></div></div>
+
+<p>The above code is perfectly valid. <code class="language-plaintext highlighter-rouge">s+s</code> is a rvalue and <code class="language-plaintext highlighter-rouge">s</code> is a lvalue inspite of beign on the opposite side of the <code class="language-plaintext highlighter-rouge">=</code> operator.</p>
+
+<hr />
+<h2 id="move-constructor">Move Constructor</h2>
+
+<p>In the move constructor all the members are moved explicitly using their move constructor. If we do not do so, the move constructor will only copy the variables.</p>
+
+<p>For the pointers, when we perform the move operation, we need to set the source pointer to <code class="language-plaintext highlighter-rouge">nullptr</code>. We use <code class="language-plaintext highlighter-rouge">std::exchange</code>.</p>
+
+<h3 id="stdexchange"><strong>std::exchange</strong></h3>
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">template</span><span class="o">&lt;</span> <span class="n">class</span> <span class="n">T</span><span class="p">,</span> <span class="n">class</span> <span class="n">U</span> <span class="o">=</span> <span class="n">T</span> <span class="o">&gt;</span>
+<span class="n">T</span> <span class="nf">exchange</span><span class="p">(</span> <span class="n">T</span><span class="o">&amp;</span> <span class="n">obj</span><span class="p">,</span> <span class="n">U</span><span class="o">&amp;&amp;</span> <span class="n">new_value</span> <span class="p">);</span>
+<span class="n">constexpr</span> <span class="n">T</span> <span class="n">exchange</span><span class="p">(</span> <span class="n">T</span><span class="o">&amp;</span> <span class="n">obj</span><span class="p">,</span> <span class="n">U</span><span class="o">&amp;&amp;</span> <span class="n">new_value</span> <span class="p">)</span>
+</code></pre></div></div>
+<ul>
+  <li>Replaces the value of obj with new_value and returns the old value of obj.</li>
+</ul>
+
+<h3 id="example-of-move-constructor">Example of Move constructor</h3>
+<pre><code class="language-C">class Widget {
+    private:
+        int i{0};
+        std::string s{};
+        int *p{ nullptr };
+        
+   ` public:
+        // Move Constructor
+        Widget(Widget&amp;&amp; w) noexcept
+            :i (std::move(w.i))
+            ,s (std::move(w.s))
+            ,p (std::exchange(w.pi, nullptr))
+        {
+        }
+
+}
+</code></pre>
+
+<ul>
+  <li>The constructor is <code class="language-plaintext highlighter-rouge">noexcept</code>. It means if the constructor fails, it will behave as no operation was performed. The <code class="language-plaintext highlighter-rouge">noexcept</code> is for the speed up of the constructor. The speed up due to this is 60%.</li>
+  <li>C++ Core guidelin: Ideally that is moved-from should be set to the default value type. If its not set there must be a very strong reason to do so.<br />
+In the above implementation when <code class="language-plaintext highlighter-rouge">i</code> is moved its value after moving should be defaulted to <code class="language-plaintext highlighter-rouge">0</code>.</li>
+</ul>
+
+<p>If the move constructor is defaulted then the moved-from values have undefined state.</p>
+
+<pre><code class="language-C">    // No need to rest the unique pointer
+    std::unique_ptr&lt;int&gt; p{};
+    Widget(Widget&amp;&amp; w) noexcept
+        :i (std::move(w.i))
+        ,s (std::move(w.s))
+        ,p (std::move(w.p));
+    { }
+    
+
+    // The above constructor can be defaulted.
+    // Default is also no except.
+    Widget(Widget&amp;&amp; w) = default;
+</code></pre>
+<hr />
+<h2 id="move-assignment-operator">Move assignment operator</h2>
+
+<ul>
+  <li>Clean up all visible resources</li>
+  <li>Transfer the contents of <code class="language-plaintext highlighter-rouge">w</code> into <code class="language-plaintext highlighter-rouge">this</code>.</li>
+  <li>Leave <code class="language-plaintext highlighter-rouge">w</code> in a valid but undefined state.</li>
+</ul>
+
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">Widget</span> <span class="n">operator</span><span class="o">=</span><span class="p">(</span><span class="n">Widget</span><span class="o">&amp;&amp;</span> <span class="n">w</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="c1">// free the current resource</span>
+    <span class="n">delete</span> <span class="n">pi</span><span class="p">;</span>
+
+    <span class="n">i</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">w</span><span class="p">.</span><span class="n">i</span><span class="p">);</span>
+    <span class="n">s</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">s</span><span class="p">.</span><span class="n">i</span><span class="p">);</span>
+
+    <span class="c1">// below can be replaced by std::exchange</span>
+    <span class="n">pi</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">w</span><span class="p">.</span><span class="n">pi</span><span class="p">)</span><span class="o">=</span><span class="p">;</span>
+    <span class="n">w</span><span class="p">.</span><span class="n">pi</span> <span class="o">=</span> <span class="n">nullptr</span><span class="p">;</span>
+
+    <span class="k">return</span> <span class="o">*</span><span class="n">this</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<ul>
+  <li>The current pointer may be holding some resource. If we perform move operation, then the resource is lost and never evicted from the memory. Therefore delete the pointer and then perform the move operation.</li>
+</ul>
+
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// Takes rvalues</span>
+<span class="n">vector</span><span class="o">&amp;</span>  <span class="n">operator</span><span class="o">=</span><span class="p">(</span><span class="n">vector</span><span class="o">&amp;&amp;</span> <span class="n">rhs</span> <span class="p">)</span>
+
+<span class="n">std</span><span class="o">::</span><span class="n">vector</span> <span class="n">v1</span><span class="p">{};</span>
+<span class="n">std</span><span class="o">::</span><span class="n">vector</span> <span class="n">v2</span><span class="p">{</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">};</span>
+
+<span class="cm">/* 
+* std::move() converts lvalue to Xvalue
+* Xvalue means rvalue that expires.
+*/</span>
+<span class="n">v1</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">v2</span><span class="p">);</span>
+</code></pre></div></div>
+
+<p>Here the <code class="language-plaintext highlighter-rouge">v2</code> becomes invalid when its moved to <code class="language-plaintext highlighter-rouge">v1</code>, but its still alive. The copy assignment can again make <code class="language-plaintext highlighter-rouge">v2</code> valid.</p>
+:ET

@@ -4,7 +4,7 @@
 
 title: Pratyush # the website title (if blank, full name will be used instead)
 first_name: Pratyush
-middle_name:
+# middle_name: 
 last_name: Varshney
 email: pratyushvarshney91@gmail.com
 description: > # the ">" symbol means to ignore newlines until "footer_text:"
@@ -15,7 +15,7 @@ footer_text: >
 keywords: jekyll, jekyll-theme, academic-website, portfolio-website  # add your own keywords or leave empty
 
 lang: en # the language of your site (for example: en, fr, cn, ru, etc.)
-# icon: 🔥 # the emoji used as the favicon
+icon: 🔥 # the emoji used as the favicon
 url: https://pratyusv.github.io # the base hostname & protocol for your site
 baseurl: /pratyusv # the subpath of your site, e.g. /blog/
 last_updated: false # set to true if you want to display last updated in the footer
@@ -68,7 +68,7 @@ wikidata_id: # your wikidata id
 dblp_url: # your DBLP profile url
 stackoverflow_id: #your stackoverflow id
 
-# rss_icon: true
+rss_icon: true
 
 contact_note: >
   You can even add a little note about which of these is the best way to reach you.
@@ -82,7 +82,7 @@ panelbear_analytics:  # panelbear analytics site ID (format: XXXXXXXXX)
 # Blog
 # -----------------------------------------------------------------------------
 
-blog_name: TechBlog # your blog must have a name for it to show up in the nav bar
+blog_name: Tech Pages  # your blog must have a name for it to show up in the nav bar
 # blog_description: a simple whitespace theme for academics
 permalink: /blog/:year/:title/
 
@@ -104,13 +104,9 @@ collections:
       layout: post
     output: true
     permalink: /news/:path/
-  resources:
+  projects:
     output: true
-    permalink: /resources/:path/
-  vitae:
-    output: true
-    permalink: /assets/pdf/PratyushVarshney.pdf
-
+    permalink: /projects/:path/
 
 news_limit: 5
 
@@ -151,7 +147,6 @@ plugins:
   - jekyll-email-protect
   - jekyll-feed
   - jekyll-github-metadata
-  - jekyll-imagemagick
   - jekyll-paginate-v2
   - jekyll/scholar
   - jekyll-sitemap
@@ -207,7 +202,7 @@ jekyll-archives:
 scholar:
 
   last_name: Varshney
-  first_name: [Pratyush]
+  first_name: Pratyush
 
   style: apa
   locale: en
@@ -263,7 +258,7 @@ jekyll-diagrams:
 # Optional Features
 # -----------------------------------------------------------------------------
 
-enable_google_analytics:    true  # enables google analytics
+enable_google_analytics:    false  # enables google analytics
 enable_panelbear_analytics: false  # enables panelbear analytics
 enable_google_verification: false  # enables google site verification
 enable_bing_verification:   false  # enables bing site verification
@@ -272,7 +267,7 @@ enable_math:                true   # enables math typesetting (uses MathJax)
 enable_tooltips:            false  # enables automatic tooltip links generated
                                    # for each section titles on pages and posts
 enable_darkmode:            true   # enables switching between light/dark modes
-enable_navbar_social:       true  # enables displaying social links in the
+enable_navbar_social:       false  # enables displaying social links in the
                                    # navbar on the about page
 enable_project_categories:  true   # enables categorization of projects into
                                    # multiple categories

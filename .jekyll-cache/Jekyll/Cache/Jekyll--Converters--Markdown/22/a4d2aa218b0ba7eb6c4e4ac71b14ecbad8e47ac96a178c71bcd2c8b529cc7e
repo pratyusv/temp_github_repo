@@ -1,0 +1,2 @@
+I"<p>Load balancers work at different networking layers. The load balancer generally are the end point of the network packet. Once the packet reaches the load balancer, they perform <code class="language-plaintext highlighter-rouge">SSL termination</code> i.e. they decrypt the packet. The decryption is generally performed at the load balancer level and not at server, because decryption is an processor expensive operation. The content server’s resources are generally avoided for performing this intensive task.</p>
+:ET
