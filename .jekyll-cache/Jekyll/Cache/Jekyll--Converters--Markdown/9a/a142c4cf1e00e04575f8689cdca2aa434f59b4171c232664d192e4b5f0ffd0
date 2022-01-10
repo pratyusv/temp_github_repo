@@ -1,2 +1,0 @@
-I"à<p>In the problem of load balancing, a hash function is used to assign the incoming BLOB to a server. A general approach would be to calculate the hash of the BLOB object and take modulus with the number of servers (n).</p>
-:ET

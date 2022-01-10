@@ -2,20 +2,20 @@
  * Style overrides for distill blog posts.
  ******************************************************************************/
 
-// d-byline {
-//   border-top-color: var(--global-divider-color) !important;
-// }
+d-byline {
+  border-top-color: var(--global-divider-color) !important;
+}
 
-// d-byline h3 {
-//   color: var(--global-text-color) !important;
-// }
+d-byline h3 {
+  color: var(--global-text-color) !important;
+}
 
-// d-byline a, d-article d-byline a {
-//   color: var(--global-text-color) !important;
-//   &:hover {
-//     color: var(--global-hover-color) !important;
-//   }
-// }
+d-byline a, d-article d-byline a {
+  color: var(--global-text-color) !important;
+  &:hover {
+    color: var(--global-hover-color) !important;
+  }
+}
 
 d-article {
   border-top-color: var(--global-divider-color) !important;
@@ -65,14 +65,14 @@ d-article {
       div {
         display: block;
         outline: none;
-        // margin-bottom: 0.8em;
+        margin-bottom: 0.8em;
         color: rgba(0, 0, 0, 0.8);
         font-weight: bold;
       }
       ul {
         padding-left: 1em;
         margin-top: 0;
-        // margin-bottom: 6px;
+        margin-bottom: 6px;
         list-style-type: none;
         li {
           margin-bottom: 0.25em;
@@ -83,7 +83,7 @@ d-article {
       line-height: 1.4em;
     }
     toc-line {
-      border-right: 1px solid var(--global-divider-color); 
+      border-right: 1px solid var(--global-divider-color);
       grid-column: toc-line;
     }
   }
@@ -114,8 +114,8 @@ d-appendix {
       grid-column-start: 2;
       grid-column-end: -2;
       padding-bottom: 0.5em;
-      // margin-bottom: 1em;
-      // padding-top: 0.5em;
+      margin-bottom: 1em;
+      padding-top: 0.5em;
       width: 100%;
       border: 1px solid var(--global-divider-color);
       nav {
